@@ -127,8 +127,9 @@
 	<!-- Get Files -->
 	<script type="text/javascript">
 	zip.workerScriptsPath = 'js/';
+	var error = "";
+
 	$(document).ready(function() {
-		var files = "";
 		var dropzone = new Dropzone("div#dropzone", { url: "/", autoQueue: false, maxFilesize: 100});	
 		function unzipUrl(dataURL, callback) {
 		  // use a zip.BlobReader object to read zipped data stored into blob variable
@@ -137,7 +138,11 @@
 			zipReader.getEntries(function(entries) {
 			  // get data from the first file
 			  console.log("Extracted File: " + entries);
-			  files[files.length] = entries;
+			  for(int i = 0;i < entries; i++){
+					if(!entries[0].directory){
+					UploadToImgur(entries[i]);
+					}
+				}
 			});
 		  }, onerror);
 		}
@@ -151,9 +156,6 @@
 		});
 
 	});
-    </script>
-	
-	<script>
 		function getQueryStrings() { 
 		  var assoc  = {};
 		  var decode = function (s) { return decodeURIComponent(s.replace(/\+/g, " ")); };
@@ -173,21 +175,19 @@
 			clientId = document.getElementById('clientid').value;
 			window.location = 'https://api.imgur.com/oauth2/authorize?client_id=' + clientId + '&response_type=token&state=APPLICATION_STATE';
 		}
-		$(document).ready(function() {
+		function UploadToImgur(file) {
 		/* code here */ 
-			var error = "";
 			
 			var qs = getQueryStrings();
 			var token = qs["access_token"] || "";
 			var clientId = token || document.getElementById("clientid").value; // Your client Id
-			var imgUrl = "http://i.imgur.com/l5OqYoZ.jpg";
 			var albumId = document.getElementById("albumid").value; // Your owned album id
 
 			if(qs["state"] == "APPLICATION_STATE" && !qs["access_token"]){
 				error= "The autorization process either failed or was canceled";
 			}
 			var form = new FormData();
-			form.append("image", imgUrl);
+			form.append("image", file);
 			form.append("album", albumId);
 
 			var settings = {
@@ -207,8 +207,7 @@
 			$.ajax(settings).done(function (response) {
 			  console.log(response);
 			});
-
-		});
+			}
 	</script>
   </body>
 
