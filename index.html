@@ -138,7 +138,7 @@
 			zipReader.getEntries(function(entries) {
 			  // get data from the first file
 			  console.log("Extracted File: " + entries);
-			  for(i = 0; i < entries; i++){
+			  for(i = 0; i < entries.length; i++){
 					if(!entries[i].directory){
 					UploadToImgur(entries[i]);
 					}
