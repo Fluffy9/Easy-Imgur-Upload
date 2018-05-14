@@ -16,7 +16,6 @@
     <!-- Custom styles for this template -->
     <link href="css/style.css" rel="stylesheet">
 	<link rel="stylesheet" href="css/dropzone.css">
-	<script type="text/javascript" src="js/dropzone.js"></script>
   </head>
 
   <body>
@@ -56,7 +55,7 @@
 			<div class="col-sm-4" style="text-align:left;">
 				<h3>Load your Client ID</h3>
 				<p>Don't have one? <a href="https://api.imgur.com/oauth2/addclient">Click here!</a> They are free and you can upload approximately 1250 images a day</p>
-				<p>If you want to upload anonymously enter only your Client Id and DO NOT click the Authorize button. If you want to upload to a specific album, fill out the album id. Otherwise one will be generated</p>
+				<p>If you want to upload anonymously enter only your Client Id and DO NOT click the Authorize button.</p>
 				<div class="form-group">
 				  <label for="clientid">Client ID:</label>
 				  <input type="text" class="form-control" id="clientid">
@@ -66,16 +65,11 @@
 			<div class="col-sm-4">
 				<h3>Upload Your Images</h3>
 				<p>Upload a .zip file of your images</p>
-				<form action="/file-upload" class="dropzone">
-				  <div class="fallback">
-					<input name="file" type="file" />
-				  </div>
-				</form>
-				<label for="albumid">Album ID:</label>
-				  <input type="text" class="form-control" id="albumid">
+				<div id="dropzone"></div>
 			</div>
 			<div class="col-sm-4">
 				<h3>Choose your options</h3>
+				<p>Submit an album id into the field below or a random one will be generated</p>
 				<div class="form-group">
 				  <label for="clientid">Sort By:</label>
 				  <select class="form-control">
@@ -85,6 +79,9 @@
 					  <option>Date (Desc)</option>
 					</select>
 					</br>
+				</br>
+				  <label for="albumid">Album ID:</label>
+				  <input type="text" class="form-control" id="albumid">
 				  <button type="submit" class="btn btn-default" data-toggle="modal" data-target="#myModal">Upload to Imgur!</button>
 				</div>
 			</div>
@@ -111,7 +108,7 @@
 
 	  </div>
 	</div>
-	
+	</br>
     <footer class="py-5 bg-dark">
       <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; Easy Imgur Uploader 2018</p>
@@ -122,6 +119,40 @@
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script type="text/javascript" src="js/dropzone.js"></script>
+	<script src="js/inflate.js"></script>
+	<script src="js/z-worker.js"></script>
+	<script src="js/zip.js"></script>
+	
+	<!-- Get Files -->
+	<script type="text/javascript">
+	zip.workerScriptsPath = 'js/';
+	$(document).ready(function() {
+		var files = "";
+		var dropzone = new Dropzone("div#dropzone", { url: "/", autoQueue: false, maxFilesize: 100});	
+		function unzipUrl(dataURL, callback) {
+		  // use a zip.BlobReader object to read zipped data stored into blob variable
+		  zip.createReader(new zip.BlobReader(dataURL), function(zipReader) {
+			// get entries from the zip file
+			zipReader.getEntries(function(entries) {
+			  // get data from the first file
+			  console.log("Extracted File: " + entries);
+			  files[files.length] = entries;
+			});
+		  }, onerror);
+		}
+		dropzone.on("addedfile",function(file){
+			if(this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0){
+				console.log("failed");
+			}
+			console.log("success");
+			console.log("Zip File: " + file);
+			unzipUrl(file);
+		});
+
+	});
+    </script>
+	
 	<script>
 		function getQueryStrings() { 
 		  var assoc  = {};
@@ -140,20 +171,21 @@
 		} 
 		function Authorize(){
 			clientId = document.getElementById('clientid').value;
-			clientSecret = document.getElementById('clientsecret').value;
 			window.location = 'https://api.imgur.com/oauth2/authorize?client_id=' + clientId + '&response_type=token&state=APPLICATION_STATE';
 		}
 		$(document).ready(function() {
 		/* code here */ 
+			var error = "";
+			
 			var qs = getQueryStrings();
 			var token = qs["access_token"] || "";
-			
-			var clientId = token || ""; // Your client Id
-			var clientSecret="";
+			var clientId = token || document.getElementById("clientid").value; // Your client Id
 			var imgUrl = "http://i.imgur.com/l5OqYoZ.jpg";
-			var albumId = 'Bs37V4J'; // Your owned album id
-			var error = "";
+			var albumId = document.getElementById("albumid").value; // Your owned album id
 
+			if(qs["state"] == "APPLICATION_STATE" && !qs["access_token"]){
+				error= "The autorization process either failed or was canceled";
+			}
 			var form = new FormData();
 			form.append("image", imgUrl);
 			form.append("album", albumId);
