@@ -131,7 +131,7 @@
 	var error = "";
 
 	$(document).ready(function() {
-		if(!window.location.toString().indexOf("?"))
+		if(window.location.toString().indexOf("?") == -1)
 		{
 			window.location = window.location.toString().replace("#","?");
 		}
