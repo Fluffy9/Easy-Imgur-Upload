@@ -54,35 +54,52 @@
 		<div class="row">
 			<div class="col-sm-4" style="text-align:left;">
 				<h3>Load your Client ID</h3>
-				<p>Don't have one? <a href="https://api.imgur.com/oauth2/addclient">Click here!</a> They are free and you can upload approximately 1250 images a day</p>
-				<p>If you want to upload anonymously enter only your Client Id and DO NOT click the Authorize button.</p>
-				<div class="form-group">
-				  <label for="clientid">Client ID:</label>
-				  <input type="text" class="form-control" id="clientid">
-				  <button onclick="Authorize()" class="btn btn-default">Authorize</button>
+					<p>Don't have one? <a href="https://api.imgur.com/oauth2/addclient">Click here!</a> They are free and you can upload approximately 1250 images a day</p>
+				<div id="LoadID">
+					<div class="form-group">
+					  <label for="clientid">Client ID:</label>
+					  <input type="text" class="form-control" id="clientid">
+					  <button onclick="Authorize()" class="btn btn-default">Authorize</button>
+					</div>
+				</div>
+				<div id="LoadCheck" class="check_mark">
+				  <div class="sa-icon sa-success animate">
+					<span class="sa-line sa-tip animateSuccessTip"></span>
+					<span class="sa-line sa-long animateSuccessLong"></span>
+					<div class="sa-placeholder"></div>
+					<div class="sa-fix"></div>
+				  </div>
 				</div>
 			</div>
 			<div class="col-sm-4">
 				<h3>Upload Your Images</h3>
 				<p>Upload a .zip file of your images</p>
-				<div id="dropzone"></div>
+				<div id="dropzone" style="color:black; text-align:center"><span>Drag files here or click to upload</span></div>
+				<div id="FileCheck" class="check_mark">
+				  <div class="sa-icon sa-success animate">
+					<span class="sa-line sa-tip animateSuccessTip"></span>
+					<span class="sa-line sa-long animateSuccessLong"></span>
+					<div class="sa-placeholder"></div>
+					<div class="sa-fix"></div>
+				  </div>
+				</div>
 			</div>
 			<div class="col-sm-4">
 				<h3>Choose your options</h3>
-				<p>Submit an album id into the field below or a random one will be generated</p>
-				<div class="form-group">
-				  <label for="clientid">Sort By:</label>
-				  <select class="form-control">
-					  <option>Name (Asc)</option>
-					  <option>Name (Desc)</option>
-					  <option>Date (Asc)</option>
-					  <option>Date (Desc)</option>
-					</select>
-					</br>
+				<p>In your imgur account, create a new album. Enter the album id in the box below</p>
+				<div id="ChooseOptions" class="form-group">
 				</br>
 				  <label for="albumid">Album ID:</label>
 				  <input type="text" class="form-control" id="albumid">
 				  <button  id="Submit" type="submit" class="btn btn-default" data-toggle="modal" data-target="#myModal">Upload to Imgur!</button>
+				</div>
+				<div id="SubmitCheck" class="check_mark">
+				  <div class="sa-icon sa-success animate">
+					<span class="sa-line sa-tip animateSuccessTip"></span>
+					<span class="sa-line sa-long animateSuccessLong"></span>
+					<div class="sa-placeholder"></div>
+					<div class="sa-fix"></div>
+				  </div>
 				</div>
 			</div>
 		</div>
@@ -129,13 +146,30 @@
 	zip.workerScriptsPath = 'js/';
 	var images = [];
 	var error = "";
-
 	$(document).ready(function() {
-		if(window.location.toString().indexOf("?") == -1)
+		if(window.location.toString().indexOf("?") == -1 && window.location.toString().indexOf("#") != -1)
 		{
 			window.location = window.location.toString().replace("#","?");
 		}
 		var dropzone = new Dropzone("div#dropzone", { url: "/", autoQueue: false, maxFilesize: 100});	
+		var qs = getQueryStrings();
+		var clientId = token || document.getElementById("clientid").value; // Your client Id
+		var token = qs["access_token"] || clientId;
+		
+		$(".check_mark").hide();
+
+		if(token){
+			$("#LoadID").hide();
+			$("#LoadCheck").show();
+		}
+		function Error(text){
+			output = $("modal-body p");
+			output.value += text;
+		}
+		window.onerror = function(msg, url, linenumber) {
+			Error('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
+			return true;
+		}
 		function unzipUrl(dataURL, callback) {
 		  // use a zip.BlobReader object to read zipped data stored into blob variable
 		  zip.createReader(new zip.BlobReader(dataURL), function(zipReader) {
@@ -175,16 +209,24 @@
 			for(i = 0; i < images.length; i++){
 				var promise = getBase64(images[i]);
 				var image = await promise;
+				if(document.getElementById("albumId").value){
+					$("#ChooseOptions").hide();
+					$("#SubmitCheck").show();
+				}
 				UploadToImgur(image);
 				console.log("uploading...");
+				
 			}
 		});
 		dropzone.on("addedfile",function(file){
 			if(this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0){
 				console.log("failed");
+				Error("failed to recieve file");
 			}
 			console.log("success");
 			console.log("Zip File: " + file);
+			$("#dropzone").hide();
+			$("#FileCheck").show();
 			unzipUrl(file);
 		});
 
@@ -209,16 +251,13 @@
 			window.location = 'https://api.imgur.com/oauth2/authorize?client_id=' + clientId + '&response_type=token';
 		}
 		function UploadToImgur(file) {			
-			var qs = getQueryStrings();
-			var clientId = token || document.getElementById("clientid").value; // Your client Id
-			var token = qs["access_token"] || clientId;
 			var albumId = document.getElementById("albumid").value; // Your owned album id
 
 			if(!token){
-				error= "The autorization process either failed or was canceled";
+				Error("The autorization process either failed or was canceled");
 			}
 			var form = new FormData();
-			form.append("image", file.toString().replace("data:;base64",""));
+			form.append("image", file.toString.replace("data:;base64",""));
 			form.append("album", albumId);
 
 			var settings = {
@@ -236,7 +275,8 @@
 			}
 
 			$.ajax(settings).done(function (response) {
-			  console.log(response);
+			
+			  Error(response);
 			});
 			}
 	</script>
