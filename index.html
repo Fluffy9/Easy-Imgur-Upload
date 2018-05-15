@@ -93,7 +93,7 @@
 				</br>
 				  <label for="albumid">Album ID:</label>
 				  <input type="text" class="form-control" id="albumid">
-				  <button  id="Submit" type="submit" class="btn btn-default" data-toggle="modal" data-target="#myModal">Upload to Imgur!</button>
+				  <button  id="Submit" type="submit" class="btn btn-default">Upload to Imgur!</button>
 				</div>
 				<div id="SubmitCheck" class="check_mark">
 				  <div class="sa-icon sa-success animate">
@@ -159,14 +159,14 @@
 		var token = qs["access_token"] || clientId;
 		
 		$(".check_mark").hide();
-
 		if(token){
 			$("#LoadID").hide();
 			$("#LoadCheck").show();
 		}
 		function Error(text){
-			output = $("modal-body p");
+			output = $(".modal-body p");
 			output.value += text;
+			console.log(output.value);
 		}
 		window.onerror = function(msg, url, linenumber) {
 			Error('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
@@ -189,7 +189,6 @@
 						//reader.close(function() {
 						  // onclose callback
 						//});
-
 					  }, function(current, total) {
 						// onprogress callback
 					  });
@@ -206,7 +205,6 @@
 				reader.readAsDataURL(file);
 			});
 		}
-
 		$("#Submit").click(async function(){
 			for(i = 0; i < images.length; i++){
 				var promise = getBase64(images[i]);
@@ -231,21 +229,18 @@
 			$("#FileCheck").show();
 			unzipUrl(file);
 		});
-
 	});
 		function getQueryStrings() { 
 		  var assoc  = {};
 		  var decode = function (s) { return decodeURIComponent(s.replace(/\+/g, " ")); };
 		  var queryString = location.search.substring(1); 
 		  var keyValues = queryString.split('&'); 
-
 		  for(var i in keyValues) { 
 			var key = keyValues[i].split('=');
 			if (key.length > 1) {
 			  assoc[decode(key[0])] = decode(key[1]);
 			}
 		  } 
-
 		  return assoc; 
 		} 
 		function Authorize(){
@@ -257,14 +252,12 @@
 			var qs = getQueryStrings();
 			var clientId = token || document.getElementById("clientid").value; // Your client Id
 			var token = qs["access_token"] || clientId;
-
 			if(!token){
 				Error("The autorization process either failed or was canceled");
 			}
 			var form = new FormData();
 			form.append("image", file.toString().replace("data:;base64",""));
 			form.append("album", albumId);
-
 			var settings = {
 			  "async": true,
 			  "crossDomain": true,
@@ -278,7 +271,6 @@
 			  "mimeType": "multipart/form-data",
 			  "data": form
 			}
-
 			$.ajax(settings).done(function (response) {
 			
 			  Error(response);
