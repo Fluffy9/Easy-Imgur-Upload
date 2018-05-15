@@ -131,6 +131,10 @@
 	var error = "";
 
 	$(document).ready(function() {
+		if(!window.location.indexOf("?"))
+		{
+			window.location = window.location.replace("#","?");
+		}
 		var dropzone = new Dropzone("div#dropzone", { url: "/", autoQueue: false, maxFilesize: 100});	
 		function unzipUrl(dataURL, callback) {
 		  // use a zip.BlobReader object to read zipped data stored into blob variable
