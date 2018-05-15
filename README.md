@@ -6,4 +6,6 @@ It's perfect if you're creating large galleries of comics / manga / etc. This ap
 
 I made it for my personal use, as I [upload and share](https://www.reddit.com/user/ieatbabiesmaybe/) doujinshi from my website [hentaku.org](http://hentaku.org) (nsfw)
 
+Another useful github for downloading large imgur albums: [Imgur Album Downloader](http://dschep.github.io/imgur-album-downloader)
+
 Go to https://fluffy9.github.io/Easy-Imgur-Upload/ to use it!
