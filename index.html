@@ -208,9 +208,7 @@
 			clientId = document.getElementById('clientid').value;
 			window.location = 'https://api.imgur.com/oauth2/authorize?client_id=' + clientId + '&response_type=token';
 		}
-		function UploadToImgur(file) {
-		/* code here */ 
-			
+		function UploadToImgur(file) {			
 			var qs = getQueryStrings();
 			var clientId = token || document.getElementById("clientid").value; // Your client Id
 			var token = qs["access_token"] || clientId;
@@ -220,7 +218,7 @@
 				error= "The autorization process either failed or was canceled";
 			}
 			var form = new FormData();
-			form.append("image", file);
+			form.append("image", file.toString.replace("data:;base64",""));
 			form.append("album", albumId);
 
 			var settings = {
