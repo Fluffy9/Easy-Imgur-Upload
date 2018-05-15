@@ -262,7 +262,7 @@
 				Error("The autorization process either failed or was canceled");
 			}
 			var form = new FormData();
-			form.append("image", file.toString.replace("data:;base64",""));
+			form.append("image", file.toString().replace("data:;base64",""));
 			form.append("album", albumId);
 
 			var settings = {
