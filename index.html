@@ -254,6 +254,8 @@
 		}
 		function UploadToImgur(file) {			
 			var albumId = document.getElementById("albumid").value; // Your owned album id
+			var qs = getQueryStrings();
+			var clientId = token || document.getElementById("clientid").value; // Your client Id
 			var token = qs["access_token"] || clientId;
 
 			if(!token){
