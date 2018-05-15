@@ -127,6 +127,7 @@
 	<!-- Get Files -->
 	<script type="text/javascript">
 	zip.workerScriptsPath = 'js/';
+	var images = [];
 	var error = "";
 
 	$(document).ready(function() {
@@ -143,7 +144,7 @@
 						entries[i].getData(new zip.BlobWriter(), function(blob) {
 						// text contains the entry data as a String
 						console.log("Blob: " + blob);
-						UploadToImgur(blob)
+						images[images.length] = blob;
 						// close the zip reader
 						//reader.close(function() {
 						  // onclose callback
@@ -156,6 +157,26 @@
 				}
 			});
 		  }, onerror);
+		}
+		function getBase64(file, onLoadCallback) {
+			return new Promise(function(resolve, reject) {
+				var reader = new FileReader();
+				reader.onload = function() { resolve(reader.result); };
+				reader.onerror = reject;
+				reader.readAsDataURL(file);
+			});
+		}
+
+		var promise = getBase64(my_pdf_file);
+		promise.then(function(result) {
+			console.log(result);
+		}); 
+		function Submit(){
+			for(i = 0; i < images.length; i++){
+				var promise = getBase64(images[i]);
+				var image = await promise;
+				UploadToImgur(image);
+			}
 		}
 		dropzone.on("addedfile",function(file){
 			if(this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0){
@@ -204,7 +225,7 @@
 			var settings = {
 			  "async": true,
 			  "crossDomain": true,
-			  "blob": "https://api.imgur.com/3/image",
+			  "url": "https://api.imgur.com/3/image",
 			  "method": "POST",
 			  "headers": {
 				"Authorization": "Bearer " + token
