@@ -254,6 +254,7 @@
 		}
 		function UploadToImgur(file) {			
 			var albumId = document.getElementById("albumid").value; // Your owned album id
+			var token = qs["access_token"] || clientId;
 
 			if(!token){
 				Error("The autorization process either failed or was canceled");
