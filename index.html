@@ -140,7 +140,18 @@
 			  console.log("Extracted File: " + entries);
 			  for(i = 0; i < entries.length; i++){
 					if(!entries[i].directory){
-					UploadToImgur(entries[i]);
+						entries[i].getData(new zip.BlobWriter(), function(blob) {
+						// text contains the entry data as a String
+						console.log("Blob: " + blob);
+						UploadToImgur(blob)
+						// close the zip reader
+						reader.close(function() {
+						  // onclose callback
+						});
+
+					  }, function(current, total) {
+						// onprogress callback
+					  });
 					}
 				}
 			});
@@ -193,7 +204,7 @@
 			var settings = {
 			  "async": true,
 			  "crossDomain": true,
-			  "url": "https://api.imgur.com/3/image",
+			  "blob": "https://api.imgur.com/3/image",
 			  "method": "POST",
 			  "headers": {
 				"Authorization": "Bearer " + token
