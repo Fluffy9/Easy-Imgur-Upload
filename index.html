@@ -163,7 +163,7 @@
 		var promise = getBase64(images[num]);
 		var image = await promise;
 		base64images[num] = image;
-		if(getLength(base64images) == getLength(images.length)){
+		if(getLength(base64images) == getLength(images)){
 			SendImage(0);
 		}
 	}
