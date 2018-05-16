@@ -205,9 +205,8 @@
 				reader.readAsDataURL(file);
 			});
 		}
-		$("#Submit").click(async function(){
-			for(i = 0; i < images.length; i++){
-				var promise = getBase64(images[i]);
+		async function SendImage(itt){
+				var promise = getBase64(images[itt]);
 				var image = await promise;
 				if(document.getElementById("albumid").value){
 					$("#ChooseOptions").hide();
@@ -216,8 +215,8 @@
 				UploadToImgur(image);
 				console.log("uploading...");
 				
-			}
-		});
+		}
+		$("#Submit").click(SendImage(0));
 		dropzone.on("addedfile",function(file){
 			if(this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0){
 				console.log("failed");
@@ -247,6 +246,7 @@
 			clientId = document.getElementById('clientid').value;
 			window.location = 'https://api.imgur.com/oauth2/authorize?client_id=' + clientId + '&response_type=token';
 		}
+		var imagenum = 1;
 		function UploadToImgur(file) {			
 			var albumId = document.getElementById("albumid").value; // Your owned album id
 			var qs = getQueryStrings();
@@ -272,8 +272,11 @@
 			  "data": form
 			}
 			$.ajax(settings).done(function (response) {
-			
-			  Error(response);
+				Error(response);
+				if(imagenum < images.length){
+					SendImage();
+					imagenum++;
+				}
 			});
 			}
 	</script>
