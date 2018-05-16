@@ -162,6 +162,9 @@
 		var promise = getBase64(images[itt]);
 		var image = await promise;
 		base64images[num] = image;
+		if(base64images.length == images.length){
+			SendImage(0);
+		}
 	}
 	function getBase64(file, onLoadCallback) {
 			return new Promise(function(resolve, reject) {
@@ -222,11 +225,10 @@
 		}
 		
 		$("#Submit").click(function(){
-			for(i = 0; i < images.length; i++){
-				Base64Images(i)
-			}
 			if(images.length > 0){
-				SendImage(0);
+				for(i = 0; i < images.length; i++){
+					Base64Images(i)
+				}
 			}
 			}
 		);
