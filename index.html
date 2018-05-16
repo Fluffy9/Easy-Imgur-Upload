@@ -158,11 +158,12 @@
 		console.log("uploading...");
 		
 	}
+	function getLength(arr){return Object.keys(arr).length;}
 	async function Base64Images(num){
 		var promise = getBase64(images[num]);
 		var image = await promise;
 		base64images[num] = image;
-		if(base64images.length == images.length){
+		if(getLength(base64images) == getLength(images.length)){
 			SendImage(0);
 		}
 	}
