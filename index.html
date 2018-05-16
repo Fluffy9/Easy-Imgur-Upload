@@ -151,20 +151,24 @@
 	var error = "";
 	async function SendImage(itt){
 		if(document.getElementById("albumid").value){
-			$("#ChooseOptions").hide();
-			$("#SubmitCheck").show();
+			if(images.length > 0){
+				$("#ChooseOptions").hide();
+				$("#SubmitCheck").show();
+			}
 		}
 		UploadToImgur(base64images[itt]);
 		console.log("uploading...");
 		
 	}
+	
 	function getLength(arr){return Object.keys(arr).length;}
+	
 	async function Base64Images(num){
 		var promise = getBase64(images[num]);
 		var image = {number: num, image: await promise};
 		base64images[image.number] = image.image;
 		if(getLength(base64images) == getLength(images)){
-			SendImage(0);
+			UploadToImgur(image,num);
 		}
 	}
 	function getBase64(file, onLoadCallback) {
@@ -227,10 +231,8 @@
 		
 		$("#Submit").click(function(){
 			if(images.length > 0){
-				for(i = 0; i < images.length; i++){
-					Base64Images(i)
+				Base64Images(0)
 				}
-			}
 			}
 		);
 		dropzone.on("addedfile",function(file){
@@ -263,7 +265,7 @@
 			window.location = 'https://api.imgur.com/oauth2/authorize?client_id=' + clientId + '&response_type=token';
 		}
 		var imagenum = 1;
-		function UploadToImgur(file) {			
+		function UploadToImgur(file,num) {			
 			var albumId = document.getElementById("albumid").value; // Your owned album id
 			var qs = getQueryStrings();
 			var clientId = token || document.getElementById("clientid").value; // Your client Id
@@ -291,7 +293,7 @@
 				Error(response);
 				if(imagenum < images.length){
 					imagenum++;
-					SendImage(imagenum);
+					Base64Images(num+1);
 				}
 			});
 			}
