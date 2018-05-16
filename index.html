@@ -167,9 +167,9 @@
 		var promise = getBase64(images[num]);
 		var image = {number: num, image: await promise};
 		base64images[image.number] = image.image;
-		if(getLength(base64images) == getLength(images)){
-			UploadToImgur(image,num);
-		}
+		//if(getLength(base64images) == getLength(images)){
+			UploadToImgur(image.image,num);
+		//}
 	}
 	function getBase64(file, onLoadCallback) {
 			return new Promise(function(resolve, reject) {
