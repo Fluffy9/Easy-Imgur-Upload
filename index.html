@@ -148,6 +148,18 @@
 	zip.workerScriptsPath = 'js/';
 	var images = [];
 	var error = "";
+	async function SendImage(itt){
+		var promise = getBase64(images[itt]);
+		var image = await promise;
+		if(document.getElementById("albumid").value){
+			$("#ChooseOptions").hide();
+			$("#SubmitCheck").show();
+		}
+		UploadToImgur(image);
+		console.log("uploading...");
+		
+	}
+
 	$(document).ready(function() {
 		if(window.location.toString().indexOf("?") == -1 && window.location.toString().indexOf("#") != -1)
 		{
@@ -204,17 +216,6 @@
 				reader.onerror = reject;
 				reader.readAsDataURL(file);
 			});
-		}
-		async function SendImage(itt){
-				var promise = getBase64(images[itt]);
-				var image = await promise;
-				if(document.getElementById("albumid").value){
-					$("#ChooseOptions").hide();
-					$("#SubmitCheck").show();
-				}
-				UploadToImgur(image);
-				console.log("uploading...");
-				
 		}
 		$("#Submit").click(function(){
 			if(images.length > 0){
