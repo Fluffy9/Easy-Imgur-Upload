@@ -162,7 +162,7 @@
 	async function Base64Images(num){
 		var promise = getBase64(images[num]);
 		var image = {number: num, image: await promise};
-		base64images[image.num] = image.image;
+		base64images[image.number] = image.image;
 		if(getLength(base64images) == getLength(images)){
 			SendImage(0);
 		}
