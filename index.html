@@ -206,6 +206,7 @@
 			});
 		}
 		async function SendImage(itt){
+			if(images.length > 0){
 				var promise = getBase64(images[itt]);
 				var image = await promise;
 				if(document.getElementById("albumid").value){
@@ -214,7 +215,7 @@
 				}
 				UploadToImgur(image);
 				console.log("uploading...");
-				
+				}
 		}
 		$("#Submit").click(SendImage(0));
 		dropzone.on("addedfile",function(file){
