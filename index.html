@@ -154,12 +154,12 @@
 			$("#ChooseOptions").hide();
 			$("#SubmitCheck").show();
 		}
-		UploadToImgur(image);
+		UploadToImgur(base64images[itt]);
 		console.log("uploading...");
 		
 	}
 	async function Base64Images(num){
-		var promise = getBase64(images[itt]);
+		var promise = getBase64(images[num]);
 		var image = await promise;
 		base64images[num] = image;
 		if(base64images.length == images.length){
