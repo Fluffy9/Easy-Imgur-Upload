@@ -158,7 +158,7 @@
 		console.log("uploading...");
 		
 	}
-	function Base64Images(num){
+	async function Base64Images(num){
 		var promise = getBase64(images[itt]);
 		var image = await promise;
 		base64images[num] = image;
