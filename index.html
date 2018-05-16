@@ -205,7 +205,7 @@
 						entries[i].getData(new zip.BlobWriter(), function(blob) {
 						// text contains the entry data as a String
 						console.log("Blob: " + blob);
-						images[images.length] = {Blob: blob, Number: num};
+						images[images.length] = {Blob: blob, Number: i};
 						// close the zip reader
 						//reader.close(function() {
 						  // onclose callback
