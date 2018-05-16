@@ -147,10 +147,9 @@
 	<script type="text/javascript">
 	zip.workerScriptsPath = 'js/';
 	var images = [];
+	var base64images = [];
 	var error = "";
 	async function SendImage(itt){
-		var promise = getBase64(images[itt]);
-		var image = await promise;
 		if(document.getElementById("albumid").value){
 			$("#ChooseOptions").hide();
 			$("#SubmitCheck").show();
@@ -158,6 +157,11 @@
 		UploadToImgur(image);
 		console.log("uploading...");
 		
+	}
+	function Base64Images(num){
+		var promise = getBase64(images[itt]);
+		var image = await promise;
+		base64images[num] = image;
 	}
 	function getBase64(file, onLoadCallback) {
 			return new Promise(function(resolve, reject) {
@@ -218,6 +222,9 @@
 		}
 		
 		$("#Submit").click(function(){
+			for(i = 0; i < images.length; i++){
+				Base64Images(i)
+			}
 			if(images.length > 0){
 				SendImage(0);
 			}
