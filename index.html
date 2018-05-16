@@ -149,7 +149,8 @@
 	var images = [];
 	var error = "";
 	async function SendImage(itt){
-		var promise = getBase64(images[itt]);
+		index = images.filter(function(obj){return obj.Number == itt});
+		var promise = getBase64(index);
 		var image = await promise;
 		if(document.getElementById("albumid").value){
 			$("#ChooseOptions").hide();
@@ -204,7 +205,7 @@
 						entries[i].getData(new zip.BlobWriter(), function(blob) {
 						// text contains the entry data as a String
 						console.log("Blob: " + blob);
-						images[images.length] = blob;
+						images[images.length] = {Blob: blob, Number: num};
 						// close the zip reader
 						//reader.close(function() {
 						  // onclose callback
@@ -280,7 +281,7 @@
 			}
 			$.ajax(settings).done(function (response) {
 				Error(response);
-				if(imagenum < images.length){
+				if(imagenum <= images.length){
 					imagenum++;
 					SendImage(imagenum);
 				}
