@@ -216,9 +216,10 @@
 				console.log("uploading...");
 				
 		}
-		$("#Submit").click(
+		$("#Submit").click(function(){
 			if(images.length > 0){
 				SendImage(0);
+			}
 			}
 		);
 		dropzone.on("addedfile",function(file){
