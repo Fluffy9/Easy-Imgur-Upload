@@ -156,7 +156,7 @@
 			$("#ChooseOptions").hide();
 			$("#SubmitCheck").show();
 		}
-		UploadToImgur(image);
+		UploadToImgur(image,itt);
 		console.log("uploading...");
 		
 	}
@@ -266,8 +266,7 @@
 			clientId = document.getElementById('clientid').value;
 			window.location = 'https://api.imgur.com/oauth2/authorize?client_id=' + clientId + '&response_type=token';
 		}
-		var imagenum = 1;
-		function UploadToImgur(file) {			
+		function UploadToImgur(file,imagenum) {			
 			var albumId = document.getElementById("albumid").value; // Your owned album id
 			var qs = getQueryStrings();
 			var clientId = token || document.getElementById("clientid").value; // Your client Id
