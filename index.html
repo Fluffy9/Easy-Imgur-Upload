@@ -166,7 +166,7 @@
 				var reader = new FileReader();
 				reader.onload = function() { resolve(reader.result); };
 				reader.onerror = reject;
-				reader.readAsDataURL(file.Blob);
+				reader.readAsDataURL(file[0].Blob);
 			});
 		}
 	$(document).ready(function() {
