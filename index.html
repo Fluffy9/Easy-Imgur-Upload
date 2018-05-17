@@ -93,7 +93,7 @@
 				</br>
 				  <label for="albumid">Album ID:</label>
 				  <input type="text" class="form-control" id="albumid">
-				  <button  id="Submit" type="submit" class="btn btn-default">Upload to Imgur!</button>
+				  <button  id="Submit" type="submit" class="btn btn-default" data-toggle="modal" data-target="#myModal">Upload to Imgur!</button>
 				</div>
 				<div id="SubmitCheck" class="check_mark">
 				  <div class="sa-icon sa-success animate">
@@ -114,15 +114,18 @@
 		<!-- Modal content-->
 		<div class="modal-content">
 		  <div class="modal-header">
-			<h4 class="modal-title">Modal Header</h4>
+			<h4 class="modal-title">Uploading...</h4>
 			<button type="button" class="close" data-dismiss="modal">&times;</button>
 		  </div>
 		  <div class="modal-body">
-			<p>Some text in the modal.</p>
+			<p id="message"></p>
+			<div class="progress">
+				<div id="ProgressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 1%" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100"></div>
+			</div>
 		  </div>
-		  <div class="modal-footer">
+		  <!--<div class="modal-footer">
 			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		  </div>
+		  </div>-->
 		</div>
 
 	  </div>
@@ -148,14 +151,17 @@
 	zip.workerScriptsPath = 'js/';
 	var images = [];
 	var error = "";
+	var progress = 0;
+
+	function ProgressBar(p){
+		$('.progress-bar').css('width', p+'%').attr('aria-valuenow', p); 
+		return p;
+	}
+	
 	async function SendImage(itt){
 		index = images.filter(function(obj){return obj.Number == itt});
 		var promise = getBase64(index);
 		var image = await promise;
-		if(document.getElementById("albumid").value){
-			$("#ChooseOptions").hide();
-			$("#SubmitCheck").show();
-		}
 		UploadToImgur(image,itt);
 		console.log("uploading...");
 		
@@ -170,6 +176,8 @@
 			});
 		}
 	$(document).ready(function() {
+		$(".check_mark").hide();
+		$("#message").hide();
 		if(window.location.toString().indexOf("?") == -1 && window.location.toString().indexOf("#") != -1)
 		{
 			window.location = window.location.toString().replace("#","?");
@@ -179,7 +187,6 @@
 		var clientId = token || document.getElementById("clientid").value; // Your client Id
 		var token = qs["access_token"] || clientId;
 		
-		$(".check_mark").hide();
 		if(token){
 			$("#LoadID").hide();
 			$("#LoadCheck").show();
@@ -201,22 +208,7 @@
 			  // get data from the first file
 			  console.log("Extracted File: " + entries);
 			  AddImage(entries,0,entries.length);
-			  /*entries.forEach(function(item,i){
-					if(!entries[i].directory){
-						entries[i].getData(new zip.BlobWriter(), function(blob) {
-						// text contains the entry data as a String
-						console.log("Blob: " + blob);
-						images[images.length] = {Blob: blob, Number: i};
-						// close the zip reader
-						//reader.close(function() {
-						  // onclose callback
-						//});
-					  }, function(current, total) {
-						// onprogress callback
-					  });
-					}
-					});*/
-				});
+			});
 		  }, onerror);
 		}
 		function AddImage(entries,index,last){
@@ -235,6 +227,12 @@
 			if(images.length > 0){
 				SendImage(0);
 			}
+			else{Error("No images found in .zip to send");}
+			if(document.getElementById("albumid").value){
+			$("#ChooseOptions").hide();
+			$("#SubmitCheck").show();
+		}
+
 			}
 		);
 		dropzone.on("addedfile",function(file){
@@ -266,6 +264,19 @@
 			clientId = document.getElementById('clientid').value;
 			window.location = 'https://api.imgur.com/oauth2/authorize?client_id=' + clientId + '&response_type=token';
 		}
+		function CalculateProgress(index){
+			step = 100.0 / images.length;
+			progress = index * step;
+			p = ProgressBar(progress);
+			if(p >= 100){
+				$(".progress").hide();
+				$("#message").show();
+				if(error){
+				$("#message").value = "Success!";
+				}
+			}
+			
+		}
 		function UploadToImgur(file,imagenum) {			
 			var albumId = document.getElementById("albumid").value; // Your owned album id
 			var qs = getQueryStrings();
@@ -292,6 +303,7 @@
 			}
 			$.ajax(settings).done(function (response) {
 				Error(response);
+				CalculateProgress(imagenum);
 				if(imagenum <= images.length){
 					imagenum++;
 					SendImage(imagenum);
