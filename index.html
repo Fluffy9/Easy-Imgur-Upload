@@ -202,10 +202,10 @@
 			  console.log("Extracted File: " + entries);
 			  entries.forEach(function(item,i){
 					if(!entries[i].directory){
-						entries[i].getData(new zip.BlobWriter(i), function(blob, i) {
+					blob = entries[i].getData(new zip.BlobWriter(), function(blob) {
 						// text contains the entry data as a String
-						console.log("Blob: " + blob);
-						images[images.length] = {Blob: blob, Number: this.i};
+						return blob;
+						//images[images.length] = {Blob: blob, Number: i};
 						// close the zip reader
 						//reader.close(function() {
 						  // onclose callback
@@ -213,6 +213,8 @@
 					  }, function(current, total) {
 						// onprogress callback
 					  });
+					console.log("Blob: "+blob)
+					
 					}
 					});
 				});
