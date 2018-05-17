@@ -266,7 +266,7 @@
 		}
 		function CalculateProgress(index){
 			step = 100.0 / images.length;
-			progress = index * step;
+			progress = (index+1) * step;
 			p = ProgressBar(progress);
 			if(p >= 100){
 				$(".progress").hide();
