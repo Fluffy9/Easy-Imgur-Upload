@@ -222,7 +222,7 @@
 		function AddImage(entries,index,last){
 			if(index < last){
 				if(!entries[index].directory){
-					entries[index].getData(new zip.BlobWriter,function(){
+					entries[index].getData(new zip.BlobWriter(),function(blob){
 					console.log("Blob: " + blob);
 					images[images.length] = {Blob: blob, Number: index};
 					
