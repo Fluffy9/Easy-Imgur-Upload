@@ -200,12 +200,13 @@
 			zipReader.getEntries(function(entries) {
 			  // get data from the first file
 			  console.log("Extracted File: " + entries);
-			  entries.forEach(function(item,i){
+			  AddImage(entries,0,entries.length);
+			  /*entries.forEach(function(item,i){
 					if(!entries[i].directory){
-					blob = entries[i].getData(new zip.BlobWriter(), function(blob) {
+						entries[i].getData(new zip.BlobWriter(), function(blob) {
 						// text contains the entry data as a String
-						return blob;
-						//images[images.length] = {Blob: blob, Number: i};
+						console.log("Blob: " + blob);
+						images[images.length] = {Blob: blob, Number: i};
 						// close the zip reader
 						//reader.close(function() {
 						  // onclose callback
@@ -213,14 +214,23 @@
 					  }, function(current, total) {
 						// onprogress callback
 					  });
-					console.log("Blob: "+blob)
-					
 					}
-					});
+					});*/
 				});
 		  }, onerror);
 		}
-		
+		function AddImage(entries,index,last){
+			if(index < last){
+				if(!entries[index].directory){
+					entries[index].getData(new zip.BlobWriter,function(){
+					console.log("Blob: " + blob);
+					images[images.length] = {Blob: blob, Number: index};
+					
+					})
+				}
+				AddImage(entries,index+1,last);
+			}
+		}
 		$("#Submit").click(function(){
 			if(images.length > 0){
 				SendImage(0);
