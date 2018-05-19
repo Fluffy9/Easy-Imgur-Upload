@@ -206,6 +206,11 @@
 			// get entries from the zip file
 			zipReader.getEntries(function(entries) {
 			  // get data from the first file
+			  entries.sort(function(a,b){
+					var textA = a.filename.toUpperCase();
+					var textB = b.filename.toUpperCase();
+					return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+			  });
 			  console.log("Extracted File: " + entries);
 			  AddImage(entries,0,entries.length);
 			});
