@@ -10,5 +10,6 @@ Another useful github for downloading large imgur albums: [Imgur Album Downloade
 
 Go to https://fluffy9.github.io/Easy-Imgur-Upload/ to use it!
 
-**It's important to note that I have not added any error checking yet. The application will fail silently**
+**It's important to note that I have not added any error checking yet. The application will fail silently.**
+
 I will add error messages as soon as possible. The most common issue is that the imgur api will deny your request because you have used up all of your quota for the day/hour. If the loading bar stops loading for a while, check the console for an error
