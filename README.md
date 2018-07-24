@@ -11,10 +11,10 @@ This project is very much a work in progress. It works, but there are quite a fe
 
 * Imgur has a limit to how many images / how many mb you can post per day / per hour. The 2500 images a day is taken from imgur's description. It's very likely that your request will be denied after posting 2-3 galleries with about 20-30 images of moderate resolution.
 
-* Before you upload, please rename your images in the format 0001.png, 0002.png, etc. There are some issues with how images are sorted, but it works for my purposes (aka using that naming scheme). Otherwise it might not order the images correctly.
+* Before you upload, please rename your images in the format 0001.png, 0002.png, etc (notice the file names not the extensions, you do not have to upload them as png). There are some issues with how images are sorted, but it works for my purposes (aka using that naming scheme). Otherwise it might not order the images correctly.
 
 * Wait approximately 10-30 seconds for the images to load before pressing the "Upload to Imgur Button". The check mark animation can be misleading in that I didn't put it to wait until the files have been properly uploaded. Alternatively, if you open the console, you can see when all the blobs have uploaded.
 
-Follow the instructions shown on the uploader. 
+That's all. Follow the instructions shown on the uploader. 
 
 
