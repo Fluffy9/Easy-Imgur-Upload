@@ -6,6 +6,7 @@ It's perfect if you're creating large galleries of comics / manga / etc. This ap
 
 ## Documentation
 **Please Read Before Use**
+
 This project is very much a work in progress. It works, but there are quite a few bugs that make it unintuitive. I haven't had enough time to polish everything, so it would be very helpful if anyone wants to contribute.
 
 * Imgur has a limit to how many images / how many mb you can post per day / per hour. The 2500 images a day is taken from imgur's description. It's very likely that your request will be denied after posting 2-3 galleries with about 20-30 images of moderate resolution.
