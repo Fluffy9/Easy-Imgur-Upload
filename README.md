@@ -4,12 +4,16 @@ A pure Javascript web app to upload imgur albums to imgur
 
 It's perfect if you're creating large galleries of comics / manga / etc. This app allows users with an imgur account to quickly upload a .zip file of images to an album they have created. This is much easier than dragging and dropping when you have 50+ images you would like to upload. It's also great for keeping your images in the same order as they are in your folder. Imgur used to allow you to sort album images, but for some reason they removed that feature years ago and [don't seem to care about bringing it back](https://community.imgur.com/t/how-do-i-sort-by-filename/44312)
 
-I made it for my personal use, as I [upload and share](https://www.reddit.com/user/ieatbabiesmaybe/) doujinshi from my website [hentaku.org](http://hentaku.org) (nsfw)
+## Documentation
+**Please Read Before Use**
+This project is very much a work in progress. It works, but there are quite a few bugs that make it unintuitive. I haven't had enough time to polish everything, so it would be very helpful if anyone wants to contribute.
 
-Another useful github for downloading large imgur albums: [Imgur Album Downloader](http://dschep.github.io/imgur-album-downloader)
+* Imgur has a limit to how many images / how many mb you can post per day / per hour. The 2500 images a day is taken from imgur's description. It's very likely that your request will be denied after posting 2-3 galleries with about 20-30 images of moderate resolution.
 
-Go to https://fluffy9.github.io/Easy-Imgur-Upload/ to use it!
+* Before you upload, please rename your images in the format 0001.png, 0002.png, etc. There are some issues with how images are sorted, but it works for my purposes (aka using that naming scheme). Otherwise it might not order the images correctly.
 
-**It's important to note that I have not added any error checking yet. The application will fail silently.**
+* Wait approximately 10-30 seconds for the images to load before pressing the "Upload to Imgur Button". The check mark animation can be misleading in that I didn't put it to wait until the files have been properly uploaded. Alternatively, if you open the console, you can see when all the blobs have uploaded.
 
-I will add error messages as soon as possible. The most common issue is that the imgur api will deny your request because you have used up all of your quota for the day/hour. If the loading bar stops loading for a while, check the console for an error
+Follow the instructions shown on the uploader. 
+
+
