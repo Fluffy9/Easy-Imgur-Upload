@@ -175,6 +175,10 @@
 				reader.readAsDataURL(file[0].Blob);
 			});
 		}
+	window.onerror = function(msg, url, linenumber) {
+			alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
+			return true;
+		}
 	$(document).ready(function() {
 		$(".check_mark").hide();
 		$("#message").hide();
@@ -196,10 +200,7 @@
 			output.value += text;
 			console.log(output.value);
 		}
-		window.onerror = function(msg, url, linenumber) {
-			Error('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
-			return true;
-		}
+		
 		function unzipUrl(dataURL, callback) {
 		  // use a zip.BlobReader object to read zipped data stored into blob variable
 		  zip.createReader(new zip.BlobReader(dataURL), function(zipReader) {
